@@ -1,16 +1,31 @@
 //import { Inter } from "next/font/google";
 import "src/styles/globals.css";
 import { ReactNode } from "react";
+import { ClerkProvider } from "@clerk/nextjs";
+//import { Metadata } from "next";
+import Header from "src/components/Header";
 
 
 interface LayoutProps {
   children: ReactNode;
-}
+} 
 
-//const inter = Inter({ subsets: ['latin'] });
+const RootLayout: React.FC<LayoutProps> = ({ children }) => {
+  return (
+    
+    // Clerk Provider and Layout wrapper for Authentication 
+    <ClerkProvider>
+        <html lang="en">
+        <body>  
+          <div className="min-h-screen bg-gray-100"> 
+          <Header/>
+          </div>
+          {children}
+        </body>
+      </html>
+   </ClerkProvider>
+ );
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
-  return <div>{children}</div>;
 };
 
-export default Layout;
+export default RootLayout;
