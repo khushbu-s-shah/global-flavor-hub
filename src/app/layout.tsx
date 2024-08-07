@@ -17,10 +17,11 @@ const RootLayout: React.FC<LayoutProps> = ({ children }) => {
     <ClerkProvider>
         <html lang="en">
         <body>  
-          <div className="min-h-screen bg-gray-100"> 
+          <div className="min-h-screen"> 
           <Header/>
-          </div>
           {children}
+          </div>
+          
         </body>
       </html>
    </ClerkProvider>
