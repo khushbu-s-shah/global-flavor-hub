@@ -1,9 +1,9 @@
 //import { Inter } from "next/font/google";
-import "src/styles/globals.css";
+import type { Metadata } from "next";
+import "./globals.css";
 import { ReactNode } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
-//import { Metadata } from "next";
-import Header from "src/components/Header";
+import Header from "./components/Header";
 
 
 interface LayoutProps {
@@ -20,8 +20,7 @@ const RootLayout: React.FC<LayoutProps> = ({ children }) => {
           <div className="min-h-screen"> 
           <Header/>
           {children}
-          </div>
-          
+          </div> 
         </body>
       </html>
    </ClerkProvider>
