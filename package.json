@@ -6,8 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "test": "jest"
+    "lint": "eslint . --fix .js,.jsx,.ts,.tsx",
+    "test": "jest",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@clerk/nextjs": "^5.2.14",

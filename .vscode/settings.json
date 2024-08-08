@@ -7,5 +7,6 @@
   "css.lint.unknownAtRules": "ignore",
   "scss.lint.unknownAtRules": "ignore",
   "less.lint.unknownAtRules": "ignore",
-  "cSpell.words": ["nextjs", "tailwindcss", "Upsert"]
+  "cSpell.words": ["nextjs", "tailwindcss", "Upsert"],
+  "files.eol": "\n"
 }
