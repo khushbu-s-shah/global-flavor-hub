@@ -5,11 +5,11 @@ import { FaPizzaSlice, FaHamburger, FaUtensils, FaSignInAlt } from "react-icons/
 
 export default function Header() {
   return (
-    <header className="bg-white shadow-md py-4 border-b-2 border-gray-300">
+    <header className="bg-gray-900 shadow-md py-4 border-b-2 border-gray-300">
       <div className="container mx-auto flex justify-between items-center px-4">
         <div className="flex-grow text-center">
-          <Link href="/" className="text-5xl font-bold text-black" style={{ fontFamily: 'Playfair Display, serif', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)' }}>
-            GLOBAL <span style={{ fontFamily: 'Dancing Script, cursive', marginLeft: '5px', marginRight: '5px' }}>FLAVOR</span> HUB
+          <Link href="/" className="text-5xl font-bold text-white" style={{ fontFamily: 'Playfair Display, serif', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)' }}>
+            GLOBAL <span style={{ fontFamily: 'Dancing Script, cursive', marginLeft: '5px', marginRight: '5px', color: 'gray' }}>FLAVOR</span> HUB
           </Link>
         </div>
 
@@ -18,13 +18,13 @@ export default function Header() {
             <li>
               <Link
                 href="/recipes/create-edit"
-                className="text-black hover:text-gray-600 transition-colors duration-300 flex items-center"
+                className="text-white hover:text-gray-400 transition-colors duration-300 flex items-center"
               >
                 <FaUtensils className="mr-1" /> New Recipe
               </Link>
             </li>
             <li className="relative group">
-              <button className="text-black hover:text-gray-600 transition-colors duration-300 flex items-center">
+              <button className="text-white hover:text-gray-400 transition-colors duration-300 flex items-center">
                 <FaHamburger className="mr-1" /> Categories
               </button>
               <ul className="absolute top-full left-0 bg-white shadow-lg py-2 rounded-md mt-1 hidden group-hover:block">
@@ -36,7 +36,7 @@ export default function Header() {
             </li>
 
             <li className="relative group">
-              <button className="text-black hover:text-gray-600 transition-colors duration-300 flex items-center">
+              <button className="text-white hover:text-gray-400 transition-colors duration-300 flex items-center">
                 <FaUtensils className="mr-1" /> Recipes
               </button>
               <ul className="absolute top-full left-0 bg-white shadow-lg py-2 rounded-md mt-1 hidden group-hover:block">
@@ -48,7 +48,7 @@ export default function Header() {
             <li>
               <SignedOut>
                 <SignInButton>
-                  <button className="text-black hover:text-gray-600 transition-colors duration-300 flex items-center">
+                  <button className="text-white hover:text-gray-400 transition-colors duration-300 flex items-center">
                     <FaSignInAlt className="mr-1" /> Sign in
                   </button>
                 </SignInButton>
