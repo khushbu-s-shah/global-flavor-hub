@@ -9,13 +9,14 @@ interface LayoutProps {
 
 const RootLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    // Clerk Provider and Layout wrapper for Authentication
     <ClerkProvider>
       <html lang="en">
         <body>
-          <div className="min-h-screen">
+          <div className="min-h-screen bg-gray-50 border-2 border-gray-300">
             <Header />
-            {children}
+            <main className="container mx-auto px-4 py-8">
+              {children}
+            </main>
           </div>
         </body>
       </html>
