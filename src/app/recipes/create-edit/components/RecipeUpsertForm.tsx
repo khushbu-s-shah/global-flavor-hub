@@ -1,5 +1,5 @@
 'use client';
-import { createRecipe} from '@/app/action';
+import { createRecipe, updateRecipe} from '@/app/action';
 import { CATEGORY } from '@/app/constants/recipe.constants';
 import { useUser } from '@clerk/nextjs';
 import { Recipe } from '@prisma/client';
@@ -32,16 +32,16 @@ const RecipeUpsertForm: FC<{
     const handleAddIngredient = () => {
         setIngredients([...ingredients, '']);
     };
+  // Delete Ingredient
+  const handleDeleteIngredient = (index: number) => { 
+    const newIngredients = [...ingredients];
+    newIngredients.splice(index, 1);
+    setIngredients(newIngredients);
+  }; // <-- Closing curly brace added here
 
     const handleAddStep = () => {
         setSteps([...steps, '']);
-    };
-
-    const handleDeleteIngredient = (index: number) => {
-        const newIngredients = [...ingredients];
-        newIngredients.splice(index, 1);
-        setIngredients(newIngredients);
-    };
+    }
 
     const handleDeleteStep = (index: number) => {
         const newSteps = [...steps];
