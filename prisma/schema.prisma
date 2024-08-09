@@ -1,0 +1,59 @@
+// schema.prisma
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+
+// Define the Recipe collection
+model Recipe {
+  recipeId             String   @id @default(auto()) @map("_id") @db.ObjectId // Map to MongoDB's _id field
+  title                String
+  description          String
+  ingredients          String[]
+  steps                String[]
+  image                String
+  category             String
+  rating               Float?
+  cookingTimeInMinutes Int
+  createdAt            DateTime @default(now())
+  authorId String
+
+  // Define the relationship with SavedRecipes
+  savedBy SavedRecipe[]
+  // Define the relationship with Ratings
+  ratings Rating[]
+}
+
+// Define the SavedRecipe collection
+model SavedRecipe {
+  savedRecipeId String   @id @default(auto()) @map("_id") @db.ObjectId // Map to MongoDB's _id field
+  savedAt       DateTime @default(now())
+
+  userId String
+
+  
+// Define the relationship with Recipes
+  recipe   Recipe @relation(fields: [recipeId], references: [recipeId])
+  recipeId String @db.ObjectId
+}
+
+// Define the Rating collection
+model Rating {
+  ratingId String   @id @default(auto()) @map("_id") @db.ObjectId // Map to MongoDB's _id field
+  rating   Int
+  comment  String?
+  ratedAt  DateTime @default(now())
+
+  userId String
+
+  // Define the relationship with Recipes
+  recipe   Recipe @relation(fields: [recipeId], references: [recipeId])
+  recipeId String @db.ObjectId
+}

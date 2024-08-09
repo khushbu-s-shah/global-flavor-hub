@@ -1,15 +1,28 @@
-import React from "react";
-import UpsertForm from "./components/UpsertForm";
+import { FC } from 'react';
+import RecipeUpsertForm from './components/RecipeUpsertForm';
+import { getReciepe } from '@/app/action';
 
-const UpsertRecipe = () => {
-  return (
-    <div className="mx-w-xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-black mb-4">
-        Create a New Recipe
-      </h1>
-      <UpsertForm />
-    </div>
-  );
+const RecipeUpsertPage: FC<{
+    searchParams: {
+        recipeId?: string;
+    };
+}> = async ({ searchParams }) => {
+    let recipe: any = {};
+    if (searchParams?.recipeId) {
+        recipe = await getReciepe(searchParams?.recipeId || '');
+    }
+    return (
+        <div className='max-w-xl mx-auto px-4 py-8'>
+            <h1 className='text-3xl font-bold text-gray-800 mb-8'>
+                {searchParams?.recipeId ? 'Update Recipe' : 'Create Recipe'}
+            </h1>
+
+            <RecipeUpsertForm
+                recipeId={searchParams.recipeId || ''}
+                existRecipe={recipe}
+            />
+        </div>
+    );
 };
 
-export default UpsertRecipe;
+export default RecipeUpsertPage;

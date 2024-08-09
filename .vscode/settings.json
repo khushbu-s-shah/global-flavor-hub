@@ -7,6 +7,12 @@
   "css.lint.unknownAtRules": "ignore",
   "scss.lint.unknownAtRules": "ignore",
   "less.lint.unknownAtRules": "ignore",
-  "cSpell.words": ["nextjs", "tailwindcss", "Upsert"],
+  "cSpell.words": [
+    "datasource",
+    "nextjs",
+    "tailwindcss",
+    "trpc",
+    "Upsert"
+  ],
   "files.eol": "\n"
 }

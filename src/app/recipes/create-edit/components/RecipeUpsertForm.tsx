@@ -1,50 +1,79 @@
 'use client';
-import React, { useState } from "react";
+import { createRecipe} from '@/app/action';
+import { CATEGORY } from '@/app/constants/recipe.constants';
+import { useUser } from '@clerk/nextjs';
+import { Recipe } from '@prisma/client';
+import { FC, Key, useState } from 'react';
+import { useFormStatus } from 'react-dom';
 
-const UpsertForm = () => {
-  const [ingredients, setIngredients] = useState(['']);
-  const [steps, setSteps] = useState(['']);
+const RecipeUpsertForm: FC<{
+    recipeId: string;
+    existRecipe: Recipe;
+}> = ({ recipeId, existRecipe }) => {
+    const { pending } = useFormStatus();
+    const user = useUser();
+    const [ingredients, setIngredients] = useState(
+        existRecipe?.ingredients || ['']
+    );
+    const [steps, setSteps] = useState(existRecipe?.steps || ['']);
 
-  const handleIngredientChange = (index: number, value: string) => {
-    const newIngredients = [...ingredients];
-    newIngredients[index] = value;
-    setIngredients(newIngredients);
-  };
+    const handleIngredientChange = (index: number, value: string) => {
+        const newIngredients = [...ingredients];
+        newIngredients[index] = value;
+        setIngredients(newIngredients);
+    };
 
-  // Add Ingredient
-  const handleAddIngredient = () => {
-    setIngredients([...ingredients, '']);
-  };
+    const handleStepChange = (index: number, value: string) => {
+        const newSteps = [...steps];
+        newSteps[index] = value;
+        setSteps(newSteps);
+    };
 
-  // Delete Ingredient
-  const handleDeleteIngredient = (index: number) => { 
-    const newIngredients = [...ingredients];
-    newIngredients.splice(index, 1);
-    setIngredients(newIngredients);
+    const handleAddIngredient = () => {
+        setIngredients([...ingredients, '']);
+    };
 
-  const handleStepChange = (index: number, value: string) => {
-    const newSteps = [...steps];
-    newSteps[index] = value;
-    setSteps(newSteps);
-  };
+    const handleAddStep = () => {
+        setSteps([...steps, '']);
+    };
 
-  // Add Step
-  const handleAddStep = () => { 
-    setSteps([...steps, '']);   
-  };
+    const handleDeleteIngredient = (index: number) => {
+        const newIngredients = [...ingredients];
+        newIngredients.splice(index, 1);
+        setIngredients(newIngredients);
+    };
 
-  // Delete Step
-  const handleDeleteStep = (index: number) => {
-    const newSteps = [...steps];
-    newSteps.splice(index, 1);
-    setSteps(newSteps); 
-  };
-  return (
-    <form>
-           <div>
+    const handleDeleteStep = (index: number) => {
+        const newSteps = [...steps];
+        newSteps.splice(index, 1);
+        setSteps(newSteps);
+    };
+
+    const createRecipeWithBind = createRecipe.bind(
+        null,
+        ingredients,
+        steps,
+        user?.user?.id || ''
+    );
+
+    const updateRecipeWithBind = updateRecipe.bind(
+        null,
+        ingredients,
+        steps,
+        user?.user?.id || '',
+        recipeId
+    );
+
+    return (
+        <form
+            action={recipeId ? updateRecipeWithBind : createRecipeWithBind}
+            className='space-y-6'
+        >
+            <div>
                 <label
                     htmlFor='title'
-                    className='block text-gray-700 font-medium mb-1'>
+                    className='block text-gray-700 font-medium mb-1'
+                >
                     Title
                 </label>
                 <input
@@ -53,13 +82,15 @@ const UpsertForm = () => {
                     name='title'
                     defaultValue={existRecipe?.title}
                     className='w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500'
-                    required/>
+                    required
+                />
             </div>
 
             <div>
                 <label
                     htmlFor='description'
-                    className='block text-gray-700 font-medium mb-1'>
+                    className='block text-gray-700 font-medium mb-1'
+                >
                     Description
                 </label>
                 <select
@@ -67,7 +98,8 @@ const UpsertForm = () => {
                     name='category'
                     defaultValue={existRecipe?.category || ''}
                     className='w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500'
-                    required>
+                    required
+                >
                     <option key={1} value={''}>
                         Select category
                     </option>
@@ -82,7 +114,8 @@ const UpsertForm = () => {
             <div>
                 <label
                     htmlFor='description'
-                    className='block text-gray-700 font-medium mb-1'>
+                    className='block text-gray-700 font-medium mb-1'
+                >
                     Description
                 </label>
                 <textarea
@@ -91,13 +124,15 @@ const UpsertForm = () => {
                     defaultValue={existRecipe?.description}
                     rows={4}
                     className='w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500'
-                    required/>
+                    required
+                />
             </div>
 
             <div>
                 <label
                     htmlFor='image'
-                    className='block text-gray-700 font-medium mb-1'>
+                    className='block text-gray-700 font-medium mb-1'
+                >
                     Image URL
                 </label>
                 <input
@@ -106,13 +141,15 @@ const UpsertForm = () => {
                     name='image'
                     defaultValue={existRecipe?.image}
                     className='w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500'
-                    required/>
+                    required
+                />
             </div>
 
             <div>
                 <label
                     htmlFor='cookingTime'
-                    className='block text-gray-700 font-medium mb-1'>
+                    className='block text-gray-700 font-medium mb-1'
+                >
                     Cooking Time (In Minutes)
                 </label>
                 <input
@@ -121,7 +158,8 @@ const UpsertForm = () => {
                     defaultValue={existRecipe?.cookingTimeInMinutes}
                     name='cookingTimeInMinutes'
                     className='w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-500'
-                    required/>
+                    required
+                />
             </div>
 
             <div>
@@ -139,11 +177,13 @@ const UpsertForm = () => {
                             }
                             className='w-full border border-gray-300 rounded-md px-4 py-2 mb-2 focus:outline-none focus:border-blue-500'
                             placeholder={`Ingredient ${index + 1}`}
-                            required/>
+                            required
+                        />
                         <button
                             type='button'
                             onClick={() => handleDeleteIngredient(index)}
-                            className='ml-2 text-red-600 font-medium focus:outline-none'>
+                            className='ml-2 text-red-600 font-medium focus:outline-none'
+                        >
                             Delete
                         </button>
                     </div>
@@ -151,7 +191,8 @@ const UpsertForm = () => {
                 <button
                     type='button'
                     onClick={handleAddIngredient}
-                    className='text-blue-600 font-medium focus:outline-none'>
+                    className='text-blue-600 font-medium focus:outline-none'
+                >
                     + Add Ingredient
                 </button>
             </div>
@@ -171,11 +212,13 @@ const UpsertForm = () => {
                             rows={4}
                             className='w-full border border-gray-300 rounded-md px-4 py-2 mb-2 focus:outline-none focus:border-blue-500'
                             placeholder={`Step ${index + 1}`}
-                            required/>
+                            required
+                        />
                         <button
                             type='button'
                             onClick={() => handleDeleteStep(index)}
-                            className='ml-2 text-red-600 font-medium focus:outline-none'>
+                            className='ml-2 text-red-600 font-medium focus:outline-none'
+                        >
                             Delete
                         </button>
                     </div>
@@ -183,19 +226,20 @@ const UpsertForm = () => {
                 <button
                     type='button'
                     onClick={handleAddStep}
-                    className='text-blue-600 font-medium focus:outline-none'>
+                    className='text-blue-600 font-medium focus:outline-none'
+                >
                     + Add Step
                 </button>
             </div>
             <button
                 type='submit'
                 className='bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 focus:outline-none'
-                disabled={pending}>
-                  Create Recipe
+                disabled={pending}
+            >
                 {recipeId ? 'Update Recipe' : 'Create Recipe'}
             </button>
-            </form>      
-  );
+        </form>
+    );
 };
 
-export default UpsertForm;
+export default RecipeUpsertForm;
