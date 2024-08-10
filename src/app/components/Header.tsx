@@ -44,7 +44,7 @@ const Header: React.FC<HeaderProps> = () => {
                     <li>
                         <Link href='/recipes/create-edit' legacyBehavior>
                             <a className='text-white hover:text-gray-400 transition-colors duration-300 flex items-center'>
-                                <FaUtensils className="mr-1" /> New Recipe
+                                <FaUtensils className="mr-1" /> Add Recipe
                             </a>
                         </Link>
                     </li>

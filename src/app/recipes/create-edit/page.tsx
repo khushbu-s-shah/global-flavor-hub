@@ -1,15 +1,16 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import RecipeUpsertForm from './components/RecipeUpsertForm';
-import { getReciepe } from '@/app/action';
+import { getRecipe } from '@/app/action';
+
 
 const RecipeUpsertPage: FC<{
     searchParams: {
-        recipeId?: string;
+        recipeId: string;
     };
-}> = async ({ searchParams }) => {
+}> = async ({ searchParams, }) => {
     let recipe: any = {};
     if (searchParams?.recipeId) {
-        recipe = await getReciepe(searchParams?.recipeId || '');
+        recipe = await getRecipe(searchParams.recipeId);
     }
     return (
         <div className='max-w-xl mx-auto px-4 py-8'>

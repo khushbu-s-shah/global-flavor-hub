@@ -23,7 +23,7 @@ model Recipe {
   rating               Float?
   cookingTimeInMinutes Int
   createdAt            DateTime @default(now())
-  authorId String
+  authorId             String
 
   // Define the relationship with SavedRecipes
   savedBy SavedRecipe[]
@@ -35,8 +35,7 @@ model Recipe {
 model SavedRecipe {
   savedRecipeId String   @id @default(auto()) @map("_id") @db.ObjectId // Map to MongoDB's _id field
   savedAt       DateTime @default(now())
-
-  userId String
+  userId         String
 
   
 // Define the relationship with Recipes
@@ -50,8 +49,7 @@ model Rating {
   rating   Int
   comment  String?
   ratedAt  DateTime @default(now())
-
-  userId String
+  userId    String
 
   // Define the relationship with Recipes
   recipe   Recipe @relation(fields: [recipeId], references: [recipeId])

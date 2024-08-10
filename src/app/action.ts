@@ -1,8 +1,9 @@
 'use server';
 import { cache } from 'react';
 import { prisma } from './lib/prisma';
+import { Prisma } from '@prisma/client';
 import { notFound, redirect } from 'next/navigation';
-import { z } from 'zod';
+import { string, z } from 'zod';
 import { sortMethods } from './constants/recipe.constants';
 import { clerkClient, auth } from '@clerk/nextjs/server';
 import { revalidatePath } from 'next/cache';
@@ -13,8 +14,9 @@ const recipeSchema = z.object({
     ingredients: z.array(z.string()),
     steps: z.array(z.string()),
     image: z.string().url(),
-    cookingTimeInMinutes: z.number().int().positive(),
     category: z.string(),
+    cookingTimeInMinutes: z.number().int().positive(),
+    authorId: z.string(),
 });
 
 type Recipe = z.infer<typeof recipeSchema>;
@@ -23,8 +25,8 @@ export const getRecipe = cache(async (recipeId: string) => {
     const recipe = await prisma.recipe.findUnique({
         where: { recipeId },
     });
-    if (!recipe) notFound();
-    const response = await clerkClient.users.getUser(recipe.authorId);
+    if (!recipe) { notFound(); }
+    const response = await clerkClient().users.getUser(recipe.authorId);
     return {
         ...recipe,
         author: {
@@ -106,20 +108,20 @@ export const getRecipes = cache(
 export async function createRecipe(
     ingredients: string[],
     steps: string[],
-    userId: string,
+    authorId: string,
     formData: FormData
 ) {
-    let recipe;
-    try {
-        const data = {
-            title: formData.get('title'),
-            description: formData.get('description'),
+    //let recipe;
+    //try {
+        const data: Prisma.RecipeCreateInput = {
+            title: formData.get('title') as string,
+            description: formData.get('description') as string,
+            image: formData.get('image') as string,
+            cookingTimeInMinutes: Number(formData.get('cookingTimeInMinutes')),
+            category: formData.get('category') as string,
             ingredients,
             steps,
-            image: formData.get('image'),
-            cookingTimeInMinutes: Number(formData.get('cookingTimeInMinutes')),
-            authorId: userId,
-            category: formData.get('category'),
+            authorId,
         };
         // Validate the data
         const parsedData = recipeSchema.safeParse(data);
@@ -134,16 +136,19 @@ export async function createRecipe(
         }
 
         // Create the recipe in the database
-        recipe = await prisma.recipe.create({
-            data: parsedData.data,
+        const recipe = await prisma.recipe.create({
+            data: parsedData.data as Prisma.RecipeCreateInput,
         });
 
-        redirect('/recipes/' + recipe?.recipeId);
-    } catch (error: any) {
+        console.log(recipe); // Check if recipe and recipeId are valid
+        redirect(`/recipes/${recipe.recipeId}`);
+        //return;
+
+    } /*catch (error: any) {
         console.log(error);
         throw new Error(error.message || 'Internal server error');
     }
-}
+}*/
 
 export async function updateRecipe(
     ingredients: string[],
@@ -152,16 +157,17 @@ export async function updateRecipe(
     recipeId: string,
     formData: FormData
 ) {
-    let recipe;
-    try {
+    let recipe : any;
+    //try {
         const payload = {
-            title: formData.get('title'),
-            description: formData.get('description'),
+            title: formData.get('title') as string,
+            description: formData.get('description') as string,
             ingredients,
             steps,
-            image: formData.get('image'),
+            image: formData.get('image') as string,
             cookingTimeInMinutes: Number(formData.get('cookingTimeInMinutes')),
-            category: formData.get('category'),
+            category: formData.get('category') as string,
+            authorId,
         };
 
         // Validate the data
@@ -181,13 +187,13 @@ export async function updateRecipe(
             where: { recipeId, authorId },
             data: parsedData.data,
         });
+        redirect(`/recipes/${recipe?.recipeId}`);
 
-        redirect('/recipes/' + recipe?.recipeId);
-    } catch (error: any) {
+    }  /*catch (error: any) {
         console.log(error);
         throw new Error(error.message || 'Internal server error');
     }
-}
+}*/
 
 export async function saveRecipe(userId: string, recipeId: string) {
     try {

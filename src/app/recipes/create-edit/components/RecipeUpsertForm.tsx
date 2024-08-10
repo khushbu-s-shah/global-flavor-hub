@@ -11,59 +11,62 @@ const RecipeUpsertForm: FC<{
     existRecipe: Recipe;
 }> = ({ recipeId, existRecipe }) => {
     const { pending } = useFormStatus();
-    const user = useUser();
+    const { user } = useUser();
     const [ingredients, setIngredients] = useState(
         existRecipe?.ingredients || ['']
     );
     const [steps, setSteps] = useState(existRecipe?.steps || ['']);
 
+    // Handle Ingredient Change
     const handleIngredientChange = (index: number, value: string) => {
         const newIngredients = [...ingredients];
         newIngredients[index] = value;
         setIngredients(newIngredients);
     };
+    // Add Ingredient
+    const handleAddIngredient = () => {
+        setIngredients([...ingredients, '']);
+    };
 
+    // Delete Ingredient
+    const handleDeleteIngredient = (index: number) => { 
+        const newIngredients = [...ingredients];
+        newIngredients.splice(index, 1);
+        setIngredients(newIngredients);
+    };
+    // Handle Step Change
     const handleStepChange = (index: number, value: string) => {
         const newSteps = [...steps];
         newSteps[index] = value;
         setSteps(newSteps);
     };
-
-    const handleAddIngredient = () => {
-        setIngredients([...ingredients, '']);
-    };
-  // Delete Ingredient
-  const handleDeleteIngredient = (index: number) => { 
-    const newIngredients = [...ingredients];
-    newIngredients.splice(index, 1);
-    setIngredients(newIngredients);
-  }; // <-- Closing curly brace added here
-
+    // Add Step
     const handleAddStep = () => {
         setSteps([...steps, '']);
     }
-
+    // Delete Step
     const handleDeleteStep = (index: number) => {
         const newSteps = [...steps];
         newSteps.splice(index, 1);
         setSteps(newSteps);
     };
 
+    // Create Recipe
     const createRecipeWithBind = createRecipe.bind(
         null,
         ingredients,
         steps,
-        user?.user?.id || ''
+        user?.id as string
     );
-
+    // Update Recipe
     const updateRecipeWithBind = updateRecipe.bind(
         null,
         ingredients,
         steps,
-        user?.user?.id || '',
+        user?.id as string,
         recipeId
     );
-
+    // Render Form
     return (
         <form
             action={recipeId ? updateRecipeWithBind : createRecipeWithBind}
@@ -103,7 +106,7 @@ const RecipeUpsertForm: FC<{
                     <option key={1} value={''}>
                         Select category
                     </option>
-                    {CATEGORY.map((category) => (
+                    {CATEGORY.map((category: string) => (
                         <option key={category} value={category}>
                             {category}
                         </option>
@@ -133,7 +136,7 @@ const RecipeUpsertForm: FC<{
                     htmlFor='image'
                     className='block text-gray-700 font-medium mb-1'
                 >
-                    Image URL
+                    Image URL (Please Input Valid URL from Google)
                 </label>
                 <input
                     type='text'

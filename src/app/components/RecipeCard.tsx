@@ -43,7 +43,7 @@ const RecipeCard: React.FC<{
                         {recipe.title}
                     </h3>
                     <p className='text-gray-600 mb-4'>{recipe.category}</p>
-                    <div className='flex items-center mb-2'>
+                    <div className='flex items-center mb-2 text-black'>
                         {recipe.rating && (
                             <div className='flex items-center mr-4'>
                                 <svg
@@ -65,7 +65,7 @@ const RecipeCard: React.FC<{
                             </div>
                         )}
 
-                        <div className='flex items-center'>
+                        <div className='flex items-center text-black'>
                             <svg
                                 xmlns='http://www.w3.org/2000/svg'
                                 viewBox='0 0 24 24'
